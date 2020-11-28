@@ -6,7 +6,7 @@ from flask_jwt_extended import get_raw_jwt
 class ProductModel(banco.Model):
     __tablename__ = 'produtos'
 
-    produto_id = banco.Column(banco.Integer, primary_key=True)
+    product_id = banco.Column(banco.Integer, primary_key=True)
     description = banco.Column(banco.String(200))
     barcod = banco.Column(banco.String(32))
     pbuy = banco.Column(banco.Float(precision=2))
@@ -22,7 +22,7 @@ class ProductModel(banco.Model):
 
     def json(self):
         return {
-            'produto_id' : self.produto_id,
+            'product_id' : self.product_id,
             'description' : self.description,
             'barcod' : self.barcod,
             'pbuy' : self.pbuy,
@@ -31,8 +31,8 @@ class ProductModel(banco.Model):
             }
 
     @classmethod
-    def find(cls, produto_id):
-        product = cls.query.filter_by(produto_id = int(produto_id)).first()
+    def find(cls, product_id):
+        product = cls.query.filter_by(product_id = int(product_id)).first()
         if product:
             return product
         return None
@@ -44,7 +44,7 @@ class ProductModel(banco.Model):
     def save(self):
         banco.session.add(self)
         user = get_raw_jwt()['identity']
-        log = LogModel("'{}' cadastrou o produto: '{}' com o id: '{}'".format(user, self.description, self.produto_id), user)
+        log = LogModel("'{}' cadastrou o produto: '{}' com o id: '{}'".format(user, self.description, self.product_id), user)
         banco.session.add(log)
         banco.session.commit()
 
