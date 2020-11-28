@@ -36,11 +36,11 @@ class UserRegister(Resource):
     def post(self):
         data = args.parse_args()
 
-        if UserModel.find_by_name(dados['name']):
-            return {"message" : "name '{}' already exists. ".format(dados['name'])}, 400
+        if UserModel.find_by_name(data['name']):
+            return {"message" : "name '{}' already exists. ".format(data['name'])}, 400
 
-        new_user = UserModel(**dados)
-        new_user.save()
+        new_user = UserModel(**data)
+        new_user.create()
         return {'message': 'User created successfully!' }, 201
 
     @classmethod

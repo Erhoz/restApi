@@ -36,10 +36,17 @@ class UserModel(banco.Model):
             return user
         return None
 
-    def crate(self):
+    def get_register_log(self):
+        return LogModel.get_register_log("usuario", self.name, self.user_id)
+
+    def get_deactivation_log(self):
+        return LogModel.get_deactivation_log("usuario", self.name, self.user_id)
+
+    def create(self):
         self.status = True
         banco.session.add(self)
-        banco.session.add(LogModel("'{}' cadastrou o usuario: '{}' com o id: '{}'".format("user", "user_name", "user_id")))
+        banco.session.flush()
+        banco.session.add(self.get_register_log())
         banco.session.commit()
 
     def create_without_log(self):
@@ -50,12 +57,10 @@ class UserModel(banco.Model):
     def change_pass(self, new_pass):
         self.password = new_pass
         banco.session.add(self)
-        banco.session.add(LogModel("'{}' mudou a senha do usuario: '{}' com o id: '{}'".format("user", "user_name", "user_id")))
         banco.session.commit()
-
 
     def deactive(self):
         self.status = False
         banco.session.add(self)
-        banco.session.add(LogModel("'{}' desativou o usuario: '{}' com o id: '{}'".format("user", "user_name", "user_id")))
+        banco.session.add(self.get_deactivation_log())
         banco.session.commit()

@@ -1,6 +1,6 @@
 from sql_alchemy import banco
 from datetime import datetime
-
+from flask_jwt_extended import get_raw_jwt
 
 class LogModel(banco.Model):
     __tablename__ = 'log'
@@ -29,3 +29,25 @@ class LogModel(banco.Model):
         if log:
             return log
         return None
+
+    @classmethod
+    def get_log_action(cls, action, class_name, object_name, object_id):
+        user = get_raw_jwt()['identity']
+        log = LogModel("'{}' {} o {}: '{}' com o id: '{}'".format(user, action, class_name, object_name, object_id), user)
+        return log
+
+    @classmethod
+    def get_register_log(cls, class_name, object_name, object_id):
+        return LogModel.get_log_action("cadastrou", class_name, object_name, object_id)
+
+    @classmethod
+    def get_modification_log(cls, class_name, object_name, object_id):
+        return LogModel.get_log_action("modificou", class_name, object_name, object_id)
+
+    @classmethod
+    def get_deactivation_log(cls, class_name, object_name, object_id):
+        return LogModel.get_log_action("desativou", class_name, object_name, object_id)
+
+    @classmethod
+    def get_deletion_log(cls, class_name, object_name, object_id):
+        return LogModel.get_log_action("deletou", class_name, object_name, object_id)

@@ -25,7 +25,7 @@ class Product(Resource):
 
     @jwt_required
     def get(self, produto_id):
-        produto = ProdutoModel.find_product(int(produto_id))
+        produto = ProdutoModel.find(produto_id)
         if produto:
             return produto.json()
         return {'message' : 'Produto not found'}, 404
@@ -33,18 +33,18 @@ class Product(Resource):
     @jwt_required
     def put(self, produto_id):
         dados = Produto.args.parse_args()
-        oldp = ProdutoModel.find_product(produto_id)
+        oldp = ProdutoModel.find(produto_id)
         if oldp:
-            oldp.update_product(**dados)
+            oldp.update(**dados)
             return oldp.json(), 200
-        newp = ProdutoModel(int(produto_id), **dados)
-        produtos.insert_product(newp)
+        newp = ProdutoModel(produto_id, **dados)
+        produtos.save(newp)
         return newp.json(), 201
 
     @jwt_required
     def delete(self, produto_id):
         product = ProdutoModel.find_product(produto_id)
         if product:
-            product.delete_product()
+            product.delete()
             return {'message' : 'Hotel deleted'}
         return {'message' : 'Hotel not found'}, 404

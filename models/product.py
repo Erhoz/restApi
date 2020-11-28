@@ -1,6 +1,5 @@
 from sql_alchemy import banco
 from models.log import LogModel
-from flask_jwt_extended import get_raw_jwt
 
 
 class ProductModel(banco.Model):
@@ -41,23 +40,32 @@ class ProductModel(banco.Model):
     def find_by_barcod(cls, barcod):
         product = cls.query.filter_by(barcod = int(barcod)).first()
 
+    def get_register_log(self):
+        return LogModel.get_register_log("produto", self.description, self.product_id)
+
+    def get_modification_log(self):
+        return LogModel.get_modification_log("produto", self.description, self.product_id)
+
+    def get_deletion_log(self):
+        return LogModel.get_deletion_log("produto", self.description, self.product_id)
+
     def save(self):
         banco.session.add(self)
-        user = get_raw_jwt()['identity']
-        log = LogModel("'{}' cadastrou o produto: '{}' com o id: '{}'".format(user, self.description, self.product_id), user)
-        banco.session.add(log)
+        banco.session.flush()
+        banco.session.add(get_register_log)
         banco.session.commit()
 
-    def update_product(self, description, barcod, pbuy, psell, estoque, user):
+    def update(self, description, barcod, pbuy, psell, estoque, user):
+        banco.session.add(self.get_modification_log())
         self.description = description
         self.barcod = barcod
         self.pbuy = pbuy
         self.psell = psell
         self.estoque = estoque
-        banco.session.add(LogModel(user_name + " atualizou o produto: \"" + self.description + "\" com o id: \"" + self.id + "\"", user.id, user.name))
         banco.session.add(self)
         banco.session.commit()
 
-    def delete_product(self):
+    def delete(self):
         banco.session.delete(self)
+        banco.session.add(self.get_deletion_log())
         banco.session.commit()
