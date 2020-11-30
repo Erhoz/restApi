@@ -42,7 +42,7 @@ class Product(Resource):
 
     @jwt_required
     def delete(self, produto_id):
-        product = ProdutoModel.find_product(produto_id)
+        product = ProductModel.find_product(produto_id)
         if product:
             product.delete()
             return {'message' : 'Hotel deleted'}
