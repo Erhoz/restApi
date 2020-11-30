@@ -13,6 +13,8 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///banco.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['JWT_SECRET_KEY'] = '$zb#zcJAXFcgow%^FIGr'
 app.config['JWT_BLACKLIST_ENABLED'] = True
+app.config['JWT_ACCESS_TOKEN_EXPIRES'] = 18000
+app.config['JWT_REFRESH_TOKEN_EXPIRES'] = 18000
 api = Api(app)
 jwt = JWTManager(app)
 
