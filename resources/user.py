@@ -58,7 +58,7 @@ class UserLogin(Resource):
         if user:
             if user.status:
                 if safe_str_cmp(user.password, data['password']):
-                    access_token = create_access_token(identity=user.name, expiresIn=18000)
+                    access_token = create_access_token(identity=user.name, expires_in=18000)
                     return {'access_token': access_token}, 200
                 return {'message': 'incorrect password'}, 401
             return {'message': 'this user has been disabled'}, 401
