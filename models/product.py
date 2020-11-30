@@ -12,12 +12,11 @@ class ProductModel(banco.Model):
     psell = banco.Column(banco.Float(precision=2))
     estoque = banco.Column(banco.Float(precision=3))
 
-    def __init__(self, description, barcod, pbuy, psell, estoque):
+    def __init__(self, description, barcod, pbuy, psell):
         self.description = description
         self.barcod = barcod
         self.pbuy = pbuy
         self.psell = psell
-        self.estoque = estoque
 
     def json(self):
         return {
@@ -26,7 +25,6 @@ class ProductModel(banco.Model):
             'barcod' : self.barcod,
             'pbuy' : self.pbuy,
             'psell' : self.psell,
-            'estoque' : self.estoque
             }
 
     @classmethod
@@ -55,13 +53,12 @@ class ProductModel(banco.Model):
         banco.session.add(get_register_log)
         banco.session.commit()
 
-    def update(self, description, barcod, pbuy, psell, estoque, user):
+    def update(self, description, barcod, pbuy, psell, user):
         banco.session.add(self.get_modification_log())
         self.description = description
         self.barcod = barcod
         self.pbuy = pbuy
         self.psell = psell
-        self.estoque = estoque
         banco.session.add(self)
         banco.session.commit()
 
