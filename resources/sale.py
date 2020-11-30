@@ -1,36 +1,36 @@
 from flask_restful import Resource, reqparse
-from models.product import ProductModel
+from models.sale import saleModel
 from flask_jwt_extended import jwt_required
 
 args = reqparse.RequestParser()
-args.add_argument('description')
-args.add_argument('barcod')
-args.add_argument('pbuy')
-args.add_argument('psell')
+args.add_argument('client_id')
+args.add_argument('total')
+args.add_argument('timestamp')
+args.add_argument('effective')
 
-class Products(Resource):
+class Sales(Resource):
     @jwt_required
     def get(self):
-        return {'products' : [product.json() for product in ProductModel.query.all()]}
+        return {'sales' : [sale.json() for sale in saleModel.query.all()]}
 
     @jwt_required
-    def post(self):
+    def post(self, client_id):
         dados = args.parse_args()
-        newp = ProductModel(**dados)
-        newp.save()
-        return newp.json()
+        news = SaleModel(client_id)
+        news.save()
+        return news.json()
 
-class Product(Resource):
+class Sale(Resource):
 
     @jwt_required
-    def get(self, product_id):
+    def get(self, produto_id):
         produto = ProdutoModel.find(produto_id)
         if produto:
             return produto.json()
         return {'message' : 'Produto not found'}, 404
 
     @jwt_required
-    def put(self, product_id):
+    def put(self, produto_id):
         dados = Produto.args.parse_args()
         oldp = ProdutoModel.find(produto_id)
         if oldp:
@@ -42,17 +42,8 @@ class Product(Resource):
 
     @jwt_required
     def delete(self, produto_id):
-        product = ProdutoModel.find_product(produto_id)
-        if product:
-            product.delete()
+        sale = ProdutoModel.find_sale(produto_id)
+        if sale:
+            sale.delete()
             return {'message' : 'Hotel deleted'}
         return {'message' : 'Hotel not found'}, 404
-
-class SellProduct(Resource):
-    args = reqparse.RequestParser()
-    args.add_argument('sale_id')
-    args.add_argument('amount')
-
-    @jwt_required
-    def post(self, barcod):
-        ProductModel.find_by_barcod(barcod).sell( **args)

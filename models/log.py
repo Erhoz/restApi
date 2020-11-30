@@ -33,12 +33,16 @@ class LogModel(banco.Model):
     @classmethod
     def get_log_action(cls, action, class_name, object_name, object_id):
         user = get_raw_jwt()['identity']
-        log = LogModel("'{}' {} o {}: '{}' com o id: '{}'".format(user, action, class_name, object_name, object_id), user)
+        log = LogModel("'{}' {} {}: '{}' com o id: '{}'".format(user, action, class_name, object_name, object_id), user)
         return log
 
     @classmethod
     def get_register_log(cls, class_name, object_name, object_id):
         return LogModel.get_log_action("cadastrou", class_name, object_name, object_id)
+
+    @classmethod
+    def get_init_log(cls, class_name, object_name, object_id):
+        return LogModel.get_log_action("inciou", class_name, object_name, object_id)
 
     @classmethod
     def get_modification_log(cls, class_name, object_name, object_id):

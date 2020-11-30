@@ -3,14 +3,13 @@ from models.log import LogModel
 
 
 class ProductModel(banco.Model):
-    __tablename__ = 'produtos'
+    __tablename__ = 'product'
 
     product_id = banco.Column(banco.Integer, primary_key=True)
     description = banco.Column(banco.String(200))
     barcod = banco.Column(banco.String(32))
     pbuy = banco.Column(banco.Float(precision=2))
     psell = banco.Column(banco.Float(precision=2))
-    estoque = banco.Column(banco.Float(precision=3))
 
     def __init__(self, description, barcod, pbuy, psell):
         self.description = description
@@ -24,12 +23,12 @@ class ProductModel(banco.Model):
             'description' : self.description,
             'barcod' : self.barcod,
             'pbuy' : self.pbuy,
-            'psell' : self.psell,
+            'psell' : self.psell
             }
 
     @classmethod
     def find(cls, product_id):
-        product = cls.query.filter_by(product_id = int(product_id)).first()
+        product = cls.query.filter_by(product_id = product_id).first()
         if product:
             return product
         return None
@@ -65,4 +64,9 @@ class ProductModel(banco.Model):
     def delete(self):
         banco.session.delete(self)
         banco.session.add(self.get_deletion_log())
+        banco.session.commit()
+
+    def sell(self, sale_id, amount):
+        sele_p = SaleProductModel(sale_id, self.description, self.barcod, self.pbuy, self.psell, amount)
+        banco.session.add(sele_p)
         banco.session.commit()
