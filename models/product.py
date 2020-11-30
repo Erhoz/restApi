@@ -49,7 +49,7 @@ class ProductModel(banco.Model):
     def save(self):
         banco.session.add(self)
         banco.session.flush()
-        banco.session.add(get_register_log)
+        banco.session.add(self.get_register_log())
         banco.session.commit()
 
     def update(self, description, barcod, pbuy, psell, user):
