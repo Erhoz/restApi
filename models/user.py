@@ -6,7 +6,7 @@ class UserModel(banco.Model):
     __tablename__ = 'users'
 
     user_id = banco.Column(banco.Integer, primary_key=True)
-    name = banco.Column(banco.String(50), unique_key=True)
+    name = banco.Column(banco.String(50), unique=True)
     password = banco.Column(banco.String(40))
     status = banco.Column(banco.Boolean)
 
