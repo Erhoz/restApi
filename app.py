@@ -5,8 +5,10 @@ from resources.user import Users, User, UserRegister, UserLogin, UserLogout
 from resources.log import Logs
 from flask_jwt_extended import JWTManager
 from blacklist import BLACKLIST
+from flask_cors import CORS
 
 app = Flask(__name__)
+cors = CORS(app, resources={r"*": {"origins": "*"}})
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///banco.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['JWT_SECRET_KEY'] = '$zb#zcJAXFcgow%^FIGr'
