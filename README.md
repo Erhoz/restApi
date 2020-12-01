@@ -25,6 +25,6 @@ ou
 ### yarn start
 
 Qualquer Dúvida sobre como executar aplicação entrar em contato com os desenvolverdores:
-#### (86) 9 9916-7437 ou (89) 9909-1848
+#### (86) 9 9916-7437,  (89) 9909-1848, (89) 9942-3648
 
 
